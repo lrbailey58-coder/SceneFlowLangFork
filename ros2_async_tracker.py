@@ -164,8 +164,12 @@ class AsyncTrackingNode(Node):
             self.human_angle = math.degrees(math.atan2(best_y, best_x))
             self.get_logger().info("Human Angle: "+ str(self.human_angle))
             #self.get_logger().info("Human is at:\nx="+str(best_x)+"\ny="+str(best_y)+"\nDistance: "+str(closest_distan>
-            if self.graph.update_connection(best_x, best_y):
-                self.get_logger().info(f"GRAPH UPDATE: {self.graph.get_graph_string()}")
+            # Generate the NetworkX graph for this exact microsecond in time
+            current_sg = self.build_networkx_graph(best_x, best_y)
+            
+            # TODO: We will pass `current_sg` to the DFA evaluator engine here!
+
+    
     def build_networkx_graph(self, human_x, human_y):
         """Constructs a fresh NetworkX DiGraph for the current physical frame."""
         # 1. Initialize an empty Directed Graph
