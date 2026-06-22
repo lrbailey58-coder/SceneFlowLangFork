@@ -13,6 +13,7 @@ import numpy as np
 import math
 import threading # Needed to handle safe multi-threaded memory access
 import networkx as nx
+from pass_on_left_ego_only.py import all_human_properties
 
 class SceneNode:
     """A custom node object that perfectly matches the SceneFlowLang expectations."""
@@ -20,19 +21,20 @@ class SceneNode:
         self.id = node_id
         self.name = name
         self.base_class = base_class
-
+        
     def get_id(self):
         return self.id
+        
     def is_phantom(self):
         # The repo uses this to ignore certain nodes; we want our human to be real!
         return False
-
+        
     def __hash__(self):
-        # NetworkX requires custom objects to be hashable
+        # NetworkX requires custom objects to be hashable so it can use them as dictionary keys
         return hash(self.id)
-
+        
     def __eq__(self, other):
-        return self.id == other.id
+        return getattr(other, 'id', None) == self.id
 class AsyncTrackingNode(Node):
     def __init__(self):
         super().__init__('async_tracking_node')
@@ -75,7 +77,10 @@ class AsyncTrackingNode(Node):
             CompressedImage, '/oak/rgb/image_raw/compressed', self.camera_callback, 1,
                   callback_group=self.camera_cb_group)
 
+        self.active_properties = 
+
         self.get_logger().info('Asynchronous Object Permanence Tracker Operational!')
+        
 
     def camera_callback(self, msg):
         # Heavy computing happens here in Thread B
@@ -167,22 +172,22 @@ class AsyncTrackingNode(Node):
             # Generate the NetworkX graph for this exact microsecond in time
             current_sg = self.build_networkx_graph(best_x, best_y)
             
-            # TODO: We will pass `current_sg` to the DFA evaluator engine here!
-
+            # TODO: Loop through self.active_properties and call prop.evaluate(current_sg)
+            self.get_logger().debug("NetworkX Graph successfully built for this frame!")
     
-    def build_networkx_graph(self, human_x, human_y):
+def build_networkx_graph(self, human_x, human_y):
         """Constructs a fresh NetworkX DiGraph for the current physical frame."""
         # 1. Initialize an empty Directed Graph
         sg = nx.DiGraph()
+        
         # 2. Create the Ego (Robot) Node and Human Node
-        # Notice how the names match the EGO and HUMAN definitions we discussed earlier!
         ego_node = SceneNode(node_id=0, name="ego", base_class="vehicle")
         human_node = SceneNode(node_id=1, name="person_1", base_class="person")
-
+        
         # 3. Add the nodes to the graph
         sg.add_node(ego_node)
         sg.add_node(human_node)
-
+        
         # 4. Calculate the spatial relationship
         angle_rad = math.atan2(human_y, human_x)
         angle_deg = math.degrees(angle_rad)
@@ -195,36 +200,10 @@ class AsyncTrackingNode(Node):
             direction = "RIGHT"
         else:
             direction = "BACK"
-
-        # 5. Add the Directed Edge (Arrow) from the Robot to the Human
-        # The repository looks for relations in the edge data attributes.
-        # Check step 4 below regarding the "label" key!        # 2. Create the Ego (Robot) Node and Human Node
-        # Notice how the names match the EGO and HUMAN definitions we discussed earlier!
-        ego_node = SceneNode(node_id=0, name="ego", base_class="vehicle")
-        human_node = SceneNode(node_id=1, name="person_1", base_class="person")
-
-        # 3. Add the nodes to the graph
-        sg.add_node(ego_node)
-        sg.add_node(human_node)
-
-        # 4. Calculate the spatial relationship
-        angle_rad = math.atan2(human_y, human_x)
-        angle_deg = math.degrees(angle_rad)
-
-        if -45.0 <= angle_deg <= 45.0:
-            direction = "FRONT"
-        elif 45.0 < angle_deg <= 135.0:
-            direction = "LEFT"
-        elif -135.0 <= angle_deg < -45.0:
-            direction = "RIGHT"
-        else:
-            direction = "BACK"
-
-        # 5. Add the Directed Edge (Arrow) from the Robot to the Human
-        # The repository looks for relations in the edge data attributes.
-        # Check step 4 below regarding the "label" key!
-        sg.add_edge(ego_node, human_node, label=direction)
-
+            
+        # 5. SAFE FALLBACK: Add the directed edge with multiple attribute keys
+        sg.add_edge(ego_node, human_node, label=direction, type=direction, relation=direction)
+        
         return sg
 def main(args=None):
     rclpy.init(args=args)
