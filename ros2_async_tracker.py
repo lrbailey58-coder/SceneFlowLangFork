@@ -58,8 +58,8 @@ class AsyncTrackingNode(Node):
         self.last_seen_time = 0.0
         self.human_angle = 0.0
 
-        self.max_jump_distance = 0.25  # Increased slightly to account for faster tracking steps
-        self.memory_timeout = 3.5     # Keeps lock stable through the camera's processing lag
+        self.max_jump_distance = 0.32
+        self.memory_timeout = 3.5
 
         # --- 4. ROS2 MULTI-THREADING SETUP ---
         # Create two separate lane assignments
