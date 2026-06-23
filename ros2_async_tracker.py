@@ -173,25 +173,15 @@ class AsyncTrackingNode(Node):
                 self.active_trackers = []
                 for prop in self.active_properties:
                     self.active_trackers.extend(prop.make_concrete(current_sg))
-            '''
-SymbolicProperty(
-    "robot_must_pass_human_on_the_left",
-    "((is_front & !is_behind) -> (!is_left U is_behind))",
-    [
-        ("is_front", person_in_direction(EGO, HUMAN, "FRONT")),
-        ("is_left",  person_in_direction(EGO, HUMAN, "LEFT")),
-        ("is_behind", person_in_direction(EGO, HUMAN, "BACK"))
-    ],
-    [HUMAN]
-)
-            '''
             if self.active_trackers is not None:
                 for tracker in self.active_trackers:
                     tracker.step(current_sg)
-                    if tracker.is_trap():
-                        self.get_logger().error("Trap State")
-                    else:
-                        self.get_logger().info("Accepting State")
+                    if tracker.is_trap() and not tracker.is_accepting():
+                        self.get_logger().error("Robot Made Error (went Right)")
+                    elif tracker.is_trap():
+                        self.get_logger().info("Robot successfully passe on Left!")
+                    else:  
+                        self.get_logger().info("Robot has not yet made error")
             self.get_logger().debug("NetworkX Graph successfully built for this frame!")
     
     def build_networkx_graph(self, human_x, human_y):
