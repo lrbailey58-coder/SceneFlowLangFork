@@ -169,10 +169,10 @@ class AsyncTrackingNode(Node):
             #self.get_logger().info("Human is at:\nx="+str(best_x)+"\ny="+str(best_y)+"\nDistance: "+str(closest_distan>
             # Generate the NetworkX graph for this exact microsecond in time
             current_sg = self.build_networkx_graph(best_x, best_y)
-            if self.active_trackers = None:
+            if self.active_trackers is None:
+                self.active_trackers = []
                 for prop in self.active_properties:
-                    prop.make_concrete(current_sg)
-            # TODO: Loop through self.active_properties and call prop.evaluate(current_sg)
+                    self.active_trackers.extend(prop.make_concrete(current_sg))
             '''
 SymbolicProperty(
     "robot_must_pass_human_on_the_left",
