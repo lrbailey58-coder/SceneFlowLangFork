@@ -77,8 +77,8 @@ class AsyncTrackingNode(Node):
             CompressedImage, '/oak/rgb/image_raw/compressed', self.camera_callback, 1,
                   callback_group=self.camera_cb_group)
 
-        self.active_properties = 
-
+        self.active_properties = all_human_properties
+        self.frame_counter =0
         self.get_logger().info('Asynchronous Object Permanence Tracker Operational!')
         
 
@@ -124,6 +124,7 @@ class AsyncTrackingNode(Node):
         if best_match is not None:
             # Safely lock the variables while updating memory map values
             with self.lock:
+                self.active_trackers = symbolic_prop.make_concrete(current_sg)
                 self.human_last_x, self.human_last_y = best_match
                 self.last_seen_time = self.get_clock().now().nanoseconds / 1e9
     def lidar_callback(self, msg):
@@ -140,6 +141,7 @@ class AsyncTrackingNode(Node):
 
         if current_time - last_time > self.memory_timeout:
             self.get_logger().warn("Track lost! Human out of range. Resetting graph.")
+            self.frame_counter = 0
             with self.lock:
                 self.human_last_x = None
                 self.human_last_y = None
@@ -148,6 +150,7 @@ class AsyncTrackingNode(Node):
                 self.get_logger().info(f"GRAPH UPDATE: {self.graph.get_graph_string()}")
             return
 
+        self.frame_counter += 1
         closest_distance = 999.0
         best_x = None
         best_y = None
@@ -173,6 +176,30 @@ class AsyncTrackingNode(Node):
             current_sg = self.build_networkx_graph(best_x, best_y)
             
             # TODO: Loop through self.active_properties and call prop.evaluate(current_sg)
+            '''
+SymbolicProperty(
+    "robot_must_pass_human_on_the_left",
+    "((is_front & !is_behind) -> (!is_left U is_behind))",
+    [
+        ("is_front", person_in_direction(EGO, HUMAN, "FRONT")),
+        ("is_left",  person_in_direction(EGO, HUMAN, "LEFT")),
+        ("is_behind", person_in_direction(EGO, HUMAN, "BACK"))
+    ],
+    [HUMAN]
+)
+            '''
+            temp = False
+            try:
+                temp = self.active_trackers[0]
+                temp = True
+            except NameError:
+                pass
+            for tracker in self.active_trackers:
+                tracker.step(current_sg) 
+                if tracker.is_trap():
+                    self.get_logger().error("Trap State")
+                else:
+                    self.get_logger().error("Accepting State")
             self.get_logger().debug("NetworkX Graph successfully built for this frame!")
     
 def build_networkx_graph(self, human_x, human_y):
@@ -203,7 +230,9 @@ def build_networkx_graph(self, human_x, human_y):
             
         # 5. SAFE FALLBACK: Add the directed edge with multiple attribute keys
         sg.add_edge(ego_node, human_node, label=direction, type=direction, relation=direction)
-        
+
+        sg.graph['frame'] = self.frame_counter  # Track an incremental counter or timestamp
+        sg.graph['cache'] = {}                  # The engine uses this to prevent double-calculations
         return sg
 def main(args=None):
     rclpy.init(args=args)
