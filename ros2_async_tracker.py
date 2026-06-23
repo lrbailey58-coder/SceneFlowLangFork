@@ -13,7 +13,7 @@ import numpy as np
 import math
 import threading # Needed to handle safe multi-threaded memory access
 import networkx as nx
-from pass_on_left_ego_only.py import all_human_properties
+from pass_on_left_ego_only import all_human_properties
 
 class SceneNode:
     """A custom node object that perfectly matches the SceneFlowLang expectations."""
@@ -50,8 +50,6 @@ class AsyncTrackingNode(Node):
         self.transform = T.Compose([T.ToTensor()])
         self.threshold = 0.80
         self.categories = weights.meta["categories"]
-              # --- 3. STATE VARIABLES ---
-        self.graph = SceneGraph()
         self.camera_hfov = math.radians(73.0)
         self.latest_lidar_msg = None
 
@@ -78,6 +76,7 @@ class AsyncTrackingNode(Node):
                   callback_group=self.camera_cb_group)
 
         self.active_properties = all_human_properties
+        self.active_trackers = None
         self.frame_counter =0
         self.get_logger().info('Asynchronous Object Permanence Tracker Operational!')
         
@@ -124,7 +123,6 @@ class AsyncTrackingNode(Node):
         if best_match is not None:
             # Safely lock the variables while updating memory map values
             with self.lock:
-                self.active_trackers = symbolic_prop.make_concrete(current_sg)
                 self.human_last_x, self.human_last_y = best_match
                 self.last_seen_time = self.get_clock().now().nanoseconds / 1e9
     def lidar_callback(self, msg):
@@ -145,9 +143,6 @@ class AsyncTrackingNode(Node):
             with self.lock:
                 self.human_last_x = None
                 self.human_last_y = None
-            if self.graph.connection is not None:
-                self.graph.connection = None
-                self.get_logger().info(f"GRAPH UPDATE: {self.graph.get_graph_string()}")
             return
 
         self.frame_counter += 1
@@ -174,7 +169,9 @@ class AsyncTrackingNode(Node):
             #self.get_logger().info("Human is at:\nx="+str(best_x)+"\ny="+str(best_y)+"\nDistance: "+str(closest_distan>
             # Generate the NetworkX graph for this exact microsecond in time
             current_sg = self.build_networkx_graph(best_x, best_y)
-            
+            if self.active_trackers = None:
+                for prop in self.active_properties:
+                    prop.make_concrete(current_sg)
             # TODO: Loop through self.active_properties and call prop.evaluate(current_sg)
             '''
 SymbolicProperty(
@@ -188,21 +185,16 @@ SymbolicProperty(
     [HUMAN]
 )
             '''
-            temp = False
-            try:
-                temp = self.active_trackers[0]
-                temp = True
-            except NameError:
-                pass
-            for tracker in self.active_trackers:
-                tracker.step(current_sg) 
-                if tracker.is_trap():
-                    self.get_logger().error("Trap State")
-                else:
-                    self.get_logger().error("Accepting State")
+            if self.active_trackers is not None:
+                for tracker in self.active_trackers:
+                    tracker.step(current_sg)
+                    if tracker.is_trap():
+                        self.get_logger().error("Trap State")
+                    else:
+                        self.get_logger().info("Accepting State")
             self.get_logger().debug("NetworkX Graph successfully built for this frame!")
     
-def build_networkx_graph(self, human_x, human_y):
+    def build_networkx_graph(self, human_x, human_y):
         """Constructs a fresh NetworkX DiGraph for the current physical frame."""
         # 1. Initialize an empty Directed Graph
         sg = nx.DiGraph()
