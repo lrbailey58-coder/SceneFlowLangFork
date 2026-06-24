@@ -1,3 +1,7 @@
+1. [Wheels/Wifi/SSH]()
+2. [Camera/Web UI]()
+3. [LiDAR]()
+
 This repository was forked off of a repository that was used for a paper at the University of Virginia ("Scene Flow Specifications: Encoding and Monitoring Rich Temporal Safety Properties of Autonomous Systems"). There may be some libraries you need to download that are not listed in these instructions. If that is the case, just use pip install to install those libraries (you might also need to install pip).
 
 # Setup Steps for Husarion ROSbot XL using ROS2 snap/jazzy
