@@ -71,6 +71,8 @@ sudo rosbot.start
 ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true
 ```
 
+16. Test the romote controll included with the ROSbot XL. Open its battery cover, take the usb, and plug it into the ROSbot XL. When holding down LT, you should be able to control the robot using the joysticks. If the green `mode` light is on, the left joystick is replaced by the left control pad (the light can be toggled by pressing the `mode` button). If the controller isn't working, make sure the switch on the back is set to `X`. If it still doesn't work, wait a few minuites: the robot can't be controlled for a few minuites after it boots.
+
 ## Camera/Web UI
 These instructions are for the Oak D Pro, setup instructions may be different for different cameras
 
