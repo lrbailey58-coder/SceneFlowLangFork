@@ -165,4 +165,4 @@ python -m venv venv
 source ~/SceneFlowLangFork/venv/bin/activate
 ```
 
-5. Check what libraries you have dowloaded in your python enviornment. Download the ones you're missing (full list here) using `pip install <library>`
+5. Check what libraries you have dowloaded in your python enviornment. Download the ones you're missing ([full list here](https://github.com/lrbailey58-coder/SceneFlowLangFork/blob/main/uploaded_files/LIBRARIES)) using `pip install <library>`
