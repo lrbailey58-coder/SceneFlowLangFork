@@ -1,5 +1,5 @@
 1. [Wheels/Wifi/SSH](https://github.com/lrbailey58-coder/SceneFlowLangFork/blob/main/README.md#wheelswifissh)
-2. [Camera/Web UI]()
+2. [Camera/Web UI](https://github.com/lrbailey58-coder/SceneFlowLangFork/blob/main/README.md#cameraweb-ui)
 3. [LiDAR]()
 
 This repository was forked off of a repository that was used for a paper at the University of Virginia ("Scene Flow Specifications: Encoding and Monitoring Rich Temporal Safety Properties of Autonomous Systems"). There may be some libraries you need to download that are not listed in these instructions. If that is the case, just use pip install to install those libraries (you might also need to install pip).
