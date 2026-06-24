@@ -94,3 +94,45 @@ ros2 topic hz /oak/rgb/image_raw
 7. View the camera in the web interface. On your laptop (which needs to be on the same network as the robot), go to `http://<ROSBOT_IP>:8080/ui`, where `<ROSBOT_IP>` is the IPv4 of the ROSbot
 
 8. If the camera doesn't show up right away, click on the log panel's three dots. Go to change panel and choose 'Image'. You may need to go to the image panel's settings and change the topic to `/oak/rgb/image_raw/compressed`.
+
+## LiDAR
+These instructions are for the RPLIDAR S3. If you have a different LiDAR, the instuctions may be different
+
+1. Put the robot in autonomy mode:
+```
+sudo snap set rosbot driver.configuration=autonomy
+```
+
+2. Mirror the ros2 settings over to the LiDAR
+```
+sudo snap set husarion-rplidar $(xargs -a /var/snap/rosbot/common/ros_snap_args)
+```
+
+3. Set the baud rate (specific to RPLIDAR S3, check the baud rate for your specific LiDAR)
+```
+sudo snap set husarion-rplidar driver.serial-baudrate=1000000
+```
+
+4. Turn on the LiDAR
+```
+sudo snap start husarion-rplidar
+```
+
+5. Make sure the LiDAR is enabled (look at the husarion-rplidar row)
+```
+snap services
+```
+
+6. Look through topics and make sure that `/scan` is there
+```
+ros2 topic list
+```
+
+7. Open the Foxglove Webui (see above instructions) and go to the settings of the 3D panel. In the "Panel" section, scroll down to /scan and make it visible). You should now see the LiDAR output in the 3D panel.
+
+8. If the LiDAR is inactive (step 5) or otherwise not working, connect the robot to the internet and update the LiDAR software to the edge (beta) brach of the snap (to undo, replace `edge` with `stable`).
+```
+sudo snap refresh husarion-rplidar --channel=jazzy/edge
+```
+
+
