@@ -1,0 +1,5 @@
+[console_scripts]
+clusterer = scene_graph_vision.lidar_clusterer:main
+controller = scene_graph_vision.safety_controller:main
+manager = scene_graph_vision.scene_graph_manager:main
+zone_publisher = scene_graph_vision.zone_publisher:main

@@ -1,0 +1,4 @@
+source;share/scene_graph_vision/hook/pythonpath.dsv
+source;share/scene_graph_vision/hook/pythonpath.sh
+source;share/scene_graph_vision/hook/ament_prefix_path.dsv
+source;share/scene_graph_vision/hook/ament_prefix_path.sh
