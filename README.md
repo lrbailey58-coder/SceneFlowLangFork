@@ -6,7 +6,7 @@
 
 [Demo](https://github.com/lrbailey58-coder/SceneFlowLangFork/blob/main/README.md#running-the-demo)
 
-This repository was forked off of a repository that was used for a paper at the University of Virginia ("Scene Flow Specifications: Encoding and Monitoring Rich Temporal Safety Properties of Autonomous Systems"). There may be some libraries you need to download that are not listed in these instructions. If that is the case, just use pip install to install those libraries (you might also need to install pip).
+This repository was forked off of a repository that was used for a paper at the University of Virginia ("Scene Flow Specifications: Encoding and Monitoring Rich Temporal Safety Properties of Autonomous Systems"). There may be some libraries you need to download that are not listed in these instructions. If that is the case, just use pip install to install those libraries (you might also need to install pip). If you run into any problems that you can't get around by prompting AI, please send me an email at o276wghir@mozmail.com (I used an email mask for this just in case)
 
 # Setup Steps for Husarion ROSbot XL using ROS2 snap/jazzy
 
