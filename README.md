@@ -141,4 +141,17 @@ ros2 topic list
 sudo snap refresh husarion-rplidar --channel=jazzy/edge
 ```
 
+# Running the Demo
 
+1. Connect the ROSbot XL to the internet, then clone this github repository onto the robot
+```
+git clone https://github.com/lrbailey58-coder/SceneFlowLangFork/
+```
+
+2. Go to the Ubuntu file app, open the folder, and uncompress `stop_sign.zip`. You can keep stop_sign in the folder of this repo
+
+3. Test the LiDAR clumping algorithm. Run the following commands, then look at the Webui. A new topic, detected_objects, should appear in the list of topics in the 3D panel's settings. Make the new topic visible. You should now be able to see points representing different clumps of objects.
+```
+source ~/SceneFlowLangFork/stop_sign/install/setup.bash
+ros2 run scene_graph_vision clusterer
+```
