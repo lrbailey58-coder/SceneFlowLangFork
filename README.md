@@ -1,19 +1,51 @@
-# SceneFlow
+This repository was forked off of a repository that was used for a paper at the University of Virginia ("Scene Flow Specifications: Encoding and Monitoring Rich Temporal Safety Properties of Autonomous Systems"). There may be some libraries you need to download that are not listed in these instructions. If that is the case, just use pip install to install those libraries (you might also need to install pip).
 
-This repository contains the paper and the code of "Scene Flow Specifications: Encoding and Monitoring Rich Temporal Safety Properties of Autonomous Systems". The code is written in Python and requires [conda](https://docs.anaconda.com/free/anaconda/install/linux/) and [7z](https://www.7-zip.org/download.html) to be installed. The code was tested using Ubuntu 20.04.
+# Setup Steps for Husarion ROSbot XL using ROS2 snap/jazzy
 
-- [Installation](#installation)
-- [Replication](#replication)
+These instructions are primarily based on the [ROSbot XL quick start guide](https://husarion.com/tutorials/howtostart/rosbotxl-quick-start/). These instructions are more specific, as they are only for the **Husarion ROSbot XL using ROS2 snap/jazzy**. If you ever prompt AI to ask questions aboutnthis setup, it is highly reccommended that, in every prompt, you remind the AI model that you are using a ROSbot XL running ROS2 snap/jazzy.  
 
-## Example violations
-Below are three example violations from the `HazardAtSideLaneTwoWays` scenarios that were automatically identified by the technique.
+1. Open the case and unwrap the robot
 
-### Property 6: The opposing lane must be clear when passing vehicles
-The vehicle crosses into the opposing lane to pass the bikes in its lane. This is allowed as the opposing lane is free.
-However, the vehicle remains in the opposing lane too long after passing the bikes, coming too close to a vehicle approaching in the opposing lane.
-This is a violation as the opposing lane was not clear for the duration of the maneuver.
+2. Flip the robot over and unscrew the battery cover (you'll need a size T15 screwdriver). Plug the battery into the port in its compartment. Replace the battery cover. Flip back over.
 
-![Vehicle crosses into opposing lane to pass two bikes; does not get back into its lane fast enough when traffic comes](./videos/518.gif)
+3. Plug in the robot using the included charging cable
+
+4. Attach the two antennae to the ports on the back of the robot
+
+5. Access the robot's terminal. Do one of the following. The password is always "husarion":
+   * Connect a keyboard, mouse, and monitor to the robot. Log into the Husarion account using the default password, "husarion". Open the terminal using Ctrl + Alt + T.
+   * Connect a laptop (or other computer) directly to the robot using the included ethernet cable. On the laptop, open the terminal and input "ssh husarion@192.168.77.2". Enter the password (when you type, the letters won't show up, but they are still being tracked).
+
+6. If you are looking directly at the robot's Ubuntu system (not ssh'ed in), go to the settings (top right, gear) and change the date and time to match the current date/time (system --> date & time)
+
+7. Scan for wifi using the following two commands in order:
+   * sudo nmcli dev wifi rescan
+   * sudo nmcli dev wifi
+
+8. Open the Netplan configuration file:
+   * sudo nano /etc/netplan/01-network-manager-all.yaml
+
+9. Put the network SSID and password in the corresponding locations near the bottom of the page. You should connect the device to the lab’s local network or WM_Welcome. If Dr. Woodlief has added the robot to WM_Welcome, use that network. If not, use the lab network (SSID and password are on the router). If there is no password delete the auth section and include “ {}” directly after the SSID’s closing quotation. **DO NOT DELETE ANYTHING FROM THE NETPLAN FILE EXCEPT THE PARTS YOU ARE REPLACING. DO NOT USE TABS TO INDENT, USE SPACES.** If you need to reset the netplan file, go to the quick start guide linked at the top of this page.
+
+10. Press **Ctrl + O**, then **Enter**, then **Ctrl + X**. This is how you save and quit when editing with nano.
+
+11. Test the connection. Use:
+    * sudo netplan try
+   
+12. When prompted, press **Enter** in order to make the changes to the network settings. If it throws an error, fix it and try again. If you need to reset the netplan file, the default netplan file is copyable from the quick start guide. If you need to force commit the changes you made, use:
+    * sudo netplan apply
+
+13. Verify the conncection. Use the first command to check if the robot has recieved an IP address (write it down). Use the second command to ping a public DNS server (not nescessary if using the lab network):
+    * ip a show wlan0
+    * ping -c 3 8.8.8.8
+
+14. Access the robot remotely. Use the following command on your laptop in command line:
+    * ssh husarion@<ROSBOT_IPv4>
+
+15. Run the following in the ROSbot's terminal in order. Make sure that each command completely finished before moving on. The final command will launch the teleop, which (if everything has gone well) should allow you to control the robot from your laptop
+    * ~/flash_firmware.sh
+    * sudo rosbot.start
+    * ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true
 
 ### Property 5: Passing a bike too closely
 While the three-foot distance cited in the driving code is observed here, it is only barely met.
