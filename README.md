@@ -152,8 +152,17 @@ git clone https://github.com/lrbailey58-coder/SceneFlowLangFork/
 
 2. Go to the Ubuntu file app, open the folder, and uncompress `stop_sign.zip`. You can keep stop_sign in the folder of this repo
 
-3. Test the LiDAR clumping algorithm. Run the following commands, then look at the Webui. A new topic, detected_objects, should appear in the list of topics in the 3D panel's settings. Make the new topic visible. You should now be able to see points representing different clumps of objects.
+3. Test the LiDAR clumping algorithm. Run the following commands, then look at the Webui. A new topic, detected_objects, should appear in the list of topics in the 3D panel's settings. Make the new topic visible. You should now be able to see points representing different clumps of objects. **KEEP THIS TERMINAL RUNNING**
 ```
 source ~/SceneFlowLangFork/stop_sign/install/setup.bash
 ros2 run scene_graph_vision clusterer
 ```
+
+4. In a new terminal on the ROSbot, enter the folder of this github repository, then create a new python enviornment and activate it. After this step, there should be a `(venv)` before every command line
+```
+cd SceneFlowLangFork
+python -m venv venv
+source ~/SceneFlowLangFork/venv/bin/activate
+```
+
+5. Check what libraries you have dowloaded in your python enviornment. Download the ones you're missing (full list here) using `pip install <library>`
