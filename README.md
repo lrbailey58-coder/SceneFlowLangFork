@@ -6,7 +6,7 @@
 
 [Demo](https://github.com/lrbailey58-coder/SceneFlowLangFork/blob/main/README.md#running-the-demo)
 
-This repository was forked off of a repository that was used for a paper at the University of Virginia ("Scene Flow Specifications: Encoding and Monitoring Rich Temporal Safety Properties of Autonomous Systems"). There may be some libraries you need to download that are not listed in these instructions. If that is the case, just use pip install to install those libraries (you might also need to install pip). If you run into any problems that you can't get around by prompting AI, please send me an email at o276wghir@mozmail.com (I used an email mask for this just in case)
+This repository was forked off of a repository that was used for a paper at the University of Virginia ("Scene Flow Specifications: Encoding and Monitoring Rich Temporal Safety Properties of Autonomous Systems"). There may be some libraries you need to download that are not listed in these instructions. If that is the case, just use `pip install` or `sudo apt install` to install those libraries (you might also need to install pip). If you run into any problems that you can't get around by prompting AI, please send me an email at o276wghir@mozmail.com (I used an email mask for this just in case)
 
 # Setup Steps for Husarion ROSbot XL using ROS2 snap/jazzy
 
@@ -167,7 +167,7 @@ python -m venv venv
 source ~/SceneFlowLangFork/venv/bin/activate
 ```
 
-5. Check what libraries you have dowloaded in your python enviornment. Download the ones you're missing ([full list here](https://github.com/lrbailey58-coder/SceneFlowLangFork/blob/main/uploaded_files/LIBRARIES)) using `pip install <library>`
+5. Check what libraries you have dowloaded in your python enviornment. Download the ones you're missing ([full list here](https://github.com/lrbailey58-coder/SceneFlowLangFork/blob/main/uploaded_files/LIBRARIES)) using `pip install <library>` or `sudo apt install <library>`
 
 6. Now you can run the controlled demo. Place the robot on the ground and run the following commands. You can start off by walking around it. It should be able to track you and sense when you make it "pass on the right". If you walk on the robot's right, it will give you an error. If you walk all the way around the robot on the left, it will say that it successfully passed on the left. It may take up to 3 seconds for it to detect a human in front of it, due to the length of the bounding box algorithm. On it latches onto you, it should follow you precisely as long as you move at a regular walking pace or slower.
 ```
