@@ -169,9 +169,17 @@ source ~/SceneFlowLangFork/venv/bin/activate
 
 5. Check what libraries you have dowloaded in your python enviornment. Download the ones you're missing ([full list here](https://github.com/lrbailey58-coder/SceneFlowLangFork/blob/main/uploaded_files/LIBRARIES)) using `pip install <library>` or `sudo apt install <library>`
 
-6. Now you can run the controlled demo. Place the robot on the ground and run the following commands. You can start off by walking around it. It should be able to track you and sense when you make it "pass on the right". If you walk on the robot's right, it will give you an error. If you walk all the way around the robot on the left, it will say that it successfully passed on the left. It may take up to 3 seconds for it to detect a human in front of it, due to the length of the bounding box algorithm. On it latches onto you, it should follow you precisely as long as you move at a regular walking pace or slower.
+6. Now you can run the controlled demo. Place the robot on the ground and run the following commands. You can start off by walking around it. It should be able to track you and sense when you make it "pass on the right". If you walk on the robot's right, it will give you an error. If you walk all the way around the robot on the left, it will say that it successfully passed on the left. It may take up to 3 seconds for it to detect a human in front of it, due to the length of the bounding box algorithm. On it latches onto you, it should follow you precisely as long as you move at a regular walking pace or slower. Make sure you have the commands from step 3 still running.
 ```
 source /opt/ros/jazzy/setup.bash
 source ~/SceneFlowLangFork/venv/bin/activate
 python ~/SceneFlowLangFork/dont_pass_on_right.py
+```
+
+7. You should also be able to run the autonomous demo. Right now, the model in this repo doesn't work the best, so, in the future, I plan on training my own model that incorporates both lidar and camera data. Run the following in a new terminal at the same time as the terminals from step 3 and step 6:
+```
+source /opt/ros/jazzy/setup.bash
+source /var/snap/rosbot/common/manage_ros_env.sh
+source ~/bounding_box_project/venv/bin/activate
+python ~/SceneFlowLangFork/ros2_ml_driver.py
 ```
