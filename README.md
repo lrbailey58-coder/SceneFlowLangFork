@@ -176,7 +176,14 @@ source ~/SceneFlowLangFork/venv/bin/activate
 python ~/SceneFlowLangFork/dont_pass_on_right.py
 ```
 
-7. You should also be able to run the autonomous demo. Right now, the model in this repo doesn't work the best, so, in the future, I plan on training my own model that incorporates both lidar and camera data. Run the following in a new terminal at the same time as the terminals from step 3 and step 6:
+7. There is also a alternative demo called "don't pass chair on left". The name should explain all the additional information you need about it. To run it, use the following command:
+```
+source /opt/ros/jazzy/setup.bash
+source ~/SceneFlowLangFork/venv/bin/activate
+python ~/SceneFlowLangFork/dont_pass_chair_on_left.py
+```
+
+9. You should also be able to run the autonomous demo. Right now, the model in this repo doesn't work the best, so, in the future, I plan on training my own model that incorporates both lidar and camera data. Run the following in a new terminal at the same time as the terminals from step 3 and step 6:
 ```
 source /opt/ros/jazzy/setup.bash
 source /var/snap/rosbot/common/manage_ros_env.sh
